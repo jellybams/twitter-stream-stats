@@ -123,16 +123,16 @@ class StatsCollectorActor extends LoggingFSM[ActorState, ActorData] {
                                 topCounts: Map[String, Int]): Map[String, Int] = {
 
     incoming.foldLeft(topCounts) {
-      case (acc, (incomingEmoji, incomingEmojiCount)) =>
+      case (acc, (incomingEntity, incomingEntityCount)) =>
         log.debug("incoming entity [{}], incoming count [{}], acc [{}]",
-          incomingEmoji, incomingEmojiCount, acc)
+          incomingEntity, incomingEntityCount, acc)
 
-        if (acc.size < numTopEntities && !acc.contains(incomingEmoji)) acc + (incomingEmoji -> incomingEmojiCount)
-        else if (acc.contains(incomingEmoji)) acc + (incomingEmoji -> (acc(incomingEmoji) + incomingEmojiCount))
+        if (acc.size < numTopEntities && !acc.contains(incomingEntity)) acc + (incomingEntity -> incomingEntityCount)
+        else if (acc.contains(incomingEntity)) acc + (incomingEntity -> (acc(incomingEntity) + incomingEntityCount))
         else {
           val minEntry = acc.minBy(_._2)
-          if (updatedCounts(incomingEmoji) > minEntry._2) {
-            (acc - minEntry._1) + (incomingEmoji -> updatedCounts(incomingEmoji))
+          if (updatedCounts(incomingEntity) > minEntry._2) {
+            (acc - minEntry._1) + (incomingEntity -> updatedCounts(incomingEntity))
           }
           else acc
         }
@@ -141,4 +141,3 @@ class StatsCollectorActor extends LoggingFSM[ActorState, ActorData] {
 
   initialize()
 }
-
