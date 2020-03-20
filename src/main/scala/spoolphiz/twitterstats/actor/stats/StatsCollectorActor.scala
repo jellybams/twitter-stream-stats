@@ -1,10 +1,8 @@
 package spoolphiz.twitterstats.actor.stats
 
-import java.text.DecimalFormat
-
-import akka.actor.{ActorRef, LoggingFSM, Props}
+import akka.actor.{LoggingFSM, Props}
 import spoolphiz.twitterstats.actor.stats.StatsCollectorActor._
-import spoolphiz.twitterstats.actor.stats.StatsProcessorActor.{TweetStats, TweetStatsEnvelope}
+import spoolphiz.twitterstats.actor.stats.StatsProcessorActor.TweetStats
 import spoolphiz.twitterstats.domain.{StatsData, TweetCountAverages}
 import spoolphiz.twitterstats.util.ConfigModule
 

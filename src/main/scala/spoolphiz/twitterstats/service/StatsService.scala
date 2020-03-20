@@ -14,7 +14,7 @@ import collection.JavaConverters._
   * entity extraction is only done for the original tweet,
   * any additional entities from retweets and quoted tweets are ignored
   *
-  * if a tweet is truncated use the extended_tweet object instead, see the following
+  * if a tweet is truncated the extended_tweet object is used instead, see the following
   * https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json#extendedtweet
   * https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
   */
@@ -68,11 +68,6 @@ object StatsService extends Logging {
       if (tweet.extended_entities.nonEmpty) extractDomains(tweet.extended_entities)
       else extractDomains(tweet.entities)
     }
-  }
-
-
-  def mergeEntityCounts[T](first: Map[T, Int], second: Map[T, Int]): Map[T, Int] = {
-    first ++ second.map { case (k, v) => k -> (v + first.getOrElse(k, 0)) }
   }
 
   def extractDomains(entities: Option[Entities]): Map[ParsedDomain, Int] = {
