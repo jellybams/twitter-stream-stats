@@ -15,8 +15,12 @@ After environment variables are made available run `sbt run` from the repository
 Tests can be run via `sbt test`.
 
 ## Design considerations
-* 
-
+* handling of stats for retweets and quoted tweets needs clarification, this implementation ignores those types and only aggregates stats for original tweets - this can easily be expanded on based on requirements clarification
+* `top domains in tweets` stat takes into account domains from media that has been attached to the tweet, clarification is needed on whether this behavior is correct
+* consumption / processing semantics - does reprocessing of tweets already seen matter? do we need exactly once processing? current implementation does not guard for duplicate processing
+* stats implementation is naive and continually aggregates data for the entire run time, could be improved with a sliding window implementation
+* horizontal scalability of tweet processing can be achieved by distributing the `StatsProcessorActor` instances across multiple nodes
+* even though this implementation is basic most actors are still written as finite state machines so as to be easier to expand on 
 
 ## Path to production
 
@@ -24,7 +28,6 @@ As it stands this application is not production ready. In order to get to a prod
 * improve test coverage
 * handle stream disconnects & warnings/errors
 * implement graceful shutdown
-* distribute processing and serving of stats across multiple nodes
 * load test to ensure correct configuration and capacity for processing full twitter stream
-* allow access via JMX and integrate metrics into APM software
-* ensure logging and performance metrics can be consumed by monitoring software
+* integrate metrics into APM software
+* ensure logging can be consumed by monitoring software
