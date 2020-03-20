@@ -42,7 +42,7 @@ object StatsCollectorActor {
 
 class StatsCollectorActor extends LoggingFSM[ActorState, ActorData] {
 
-  private val numTopEntities = ConfigModule.app.getInt("actors.statsCollectorActor.numTopEmojis")
+  private val numTopEntities = ConfigModule.app.getInt("actors.statsCollectorActor.numTopEntities")
 
   override def preStart() = {
     super.preStart()

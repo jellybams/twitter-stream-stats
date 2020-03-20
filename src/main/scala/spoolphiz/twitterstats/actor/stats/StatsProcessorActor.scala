@@ -53,12 +53,11 @@ class StatsProcessorActor(statsCollector: ActorRef) extends LoggingFSM[ActorStat
     log.debug("processing tweet text: [{}]", tweet.text)
 
     val domainCounts = StatsService.extractDomainCounts(tweet)
-    val withoutMedia = for ((k, v) <- domainCounts if !k.fromMedia) yield k.domain -> v
 
     statsCollector ! TweetStats(
       emojiCount = StatsService.extractEmojis(tweet.text),
       hashtagCount = StatsService.extractHashtags(tweet.entities),
-      domainCount = withoutMedia,
+      domainCount = domainCounts.map { case (k, v) => k.domain -> v },
       containsImage = domainCounts.keys.exists(_.isImage)
     )
 

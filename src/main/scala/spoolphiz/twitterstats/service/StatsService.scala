@@ -9,6 +9,15 @@ import spoolphiz.twitterstats.util.{ConfigModule, Logging}
 
 import collection.JavaConverters._
 
+
+/**
+  * entity extraction is only done for the original tweet,
+  * any additional entities from retweets and quoted tweets are ignored
+  *
+  * if a tweet is truncated use the extended_tweet object instead, see the following
+  * https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json#extendedtweet
+  * https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
+  */
 object StatsService extends Logging {
 
   val imgDomains = ConfigModule.app.getStringList("twitter.imageDomains").asScala.toList
@@ -39,28 +48,16 @@ object StatsService extends Logging {
     }
   }
 
-  /**
-    * entity extraction is only done for the top level status,
-    * any additional entities from retweets and quotes are ignored
-    *
-    * if a tweet is truncated use the extended_tweet object instead, see the following
-    * https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json#extendedtweet
-    * https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
-    *
-    * @param tweet
-    * @return
-    */
   def extractDomainCounts(tweet: Tweet): Map[ParsedDomain, Int] = {
-    if (tweet.truncated && tweet.extended_tweet.nonEmpty)
-      mergeEntityCounts(
-        extractDomains(tweet.extended_tweet.get.entities),
+    if (tweet.truncated && tweet.extended_tweet.nonEmpty) {
+      if (tweet.extended_tweet.get.extended_entities.nonEmpty)
         extractDomains(tweet.extended_tweet.get.extended_entities)
-      )
-    else
-      mergeEntityCounts(
-        extractDomains(tweet.entities),
-        extractDomains(tweet.extended_entities)
-      )
+      else extractDomains(tweet.extended_tweet.get.entities)
+    }
+    else {
+      if (tweet.extended_entities.nonEmpty) extractDomains(tweet.extended_entities)
+      else extractDomains(tweet.entities)
+    }
   }
 
 
@@ -86,7 +83,7 @@ object StatsService extends Logging {
         }
 
         val fromMediaCollection = ents.media.map { media =>
-          val parsed = new URL(media.expanded_url)
+          val parsed = new URL(media.media_url_https)
           ParsedDomain(domain = parsed.getHost, isImage = isImage(parsed), fromMedia = true)
         }
 
@@ -96,7 +93,7 @@ object StatsService extends Logging {
       case None => Seq.empty
     }
 
-    entityList.foldLeft(Map.empty[ParsedDomain, Int]){
+    entityList.foldLeft(Map.empty[ParsedDomain, Int]) {
       case (acc, parsedDomain) =>
         if (acc.contains(parsedDomain)) acc + (parsedDomain -> (acc(parsedDomain) + 1))
         else acc + (parsedDomain -> 1)
@@ -104,6 +101,7 @@ object StatsService extends Logging {
   }
 
   def isImage(url: URL): Boolean = {
+    log.debug(s"checking host [${url.getHost}] for image match, full url [${url.toString}]")
     imgDomains.contains(url.getHost)
   }
 }

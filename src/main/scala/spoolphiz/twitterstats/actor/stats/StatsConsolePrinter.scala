@@ -30,10 +30,10 @@ class StatsConsolePrinter(statsCollector: ActorRef) extends Actor {
       s"""
         | =========================================================
         | total tweets processed: ${data.totalTweets}
-        | total run time (sec): ${data.runTimeSecs}
-        | average tweets per second: ${data.averageTweets.second}
-        | average tweets per minute: ${data.averageTweets.minute}
-        | average tweets per hour: ${data.averageTweets.hour}
+        | total run time (seconds): ${data.runTimeSecs}
+        | average tweets (second): ${data.averageTweets.second}
+        | average tweets (minute): ${data.averageTweets.minute}
+        | average tweets (hour): ${data.averageTweets.hour}
         | top emojis: ${data.topEmojis.map{ case (k, v) => k + " -> " + v}.mkString("  ")}
         | tweets with emoji: ${data.tweetsWithEmoji}
         | tweets with emoji (%): ${formatter.format(data.tweetsWithEmojiPercent)}%
