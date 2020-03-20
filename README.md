@@ -1,6 +1,23 @@
 # Twitter Stream Stats
 
-Consumes twitter's sample status stream and calculates stats. Stats are printed in the terminal via the `StatsConsolePrinter`.
+Consumes twitter's sample status stream and calculates stats. Stats are printed in the terminal every four seconds via the `StatsConsolePrinter`. Sample console output:
+
+
+    =========================================================
+    total tweets processed: 88248
+    total run time (seconds): 1267
+    average tweets (second): 69
+    average tweets (minute): 4179
+    average tweets (hour): 250744
+    top emojis: 😂 -> 3558  😭 -> 2759  ❤ -> 1589
+    tweets with emoji: 17061.0
+    tweets with emoji (%): 19.33%
+    top hashtags: WHYRUep9 -> 620  คั่นกูEP5 -> 1185  준면이와의_평생을_약속해 -> 3709
+    tweets with url (%): 27.51%
+    tweets with image url (%): 22.35%
+    top domains: pbs.twimg.com -> 26747  twitter.com -> 575  youtu.be -> 360.be -> 11
+    =========================================================
+    
 
 ## Running the app
 
