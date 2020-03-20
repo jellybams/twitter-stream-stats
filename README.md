@@ -15,7 +15,7 @@ Consumes twitter's sample status stream and calculates stats. Stats are printed 
     top hashtags: WHYRUep9 -> 620  คั่นกูEP5 -> 1185  준면이와의_평생을_약속해 -> 3709
     tweets with url (%): 27.51%
     tweets with image url (%): 22.35%
-    top domains: pbs.twimg.com -> 26747  twitter.com -> 575  youtu.be -> 360.be -> 11
+    top domains: pbs.twimg.com -> 26747  twitter.com -> 575  youtu.be -> 360
     =========================================================
     
 
