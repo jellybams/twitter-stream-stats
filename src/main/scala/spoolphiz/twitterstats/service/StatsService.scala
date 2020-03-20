@@ -22,7 +22,12 @@ object StatsService extends Logging {
 
   val imgDomains = ConfigModule.app.getStringList("twitter.imageDomains").asScala.toList
 
-  def extractEmojis(text: String): Map[String, Int] = {
+  def extractEmojis(tweet: Tweet): Map[String, Int] = {
+    val text = tweet.extended_tweet match {
+      case Some(extended) => extended.full_text
+      case None => tweet.text
+    }
+
     val extracted = EmojiParser.extractEmojis(text).asScala
 
     val grouped = extracted.foldLeft(Map.empty[String, Int]) {
@@ -36,7 +41,12 @@ object StatsService extends Logging {
     grouped
   }
 
-  def extractHashtags(entities: Option[Entities]): Map[String, Int] = {
+  def extractHashtags(tweet: Tweet): Map[String, Int] = {
+    val entities = tweet.extended_tweet match {
+      case Some(extended) => extended.entities
+      case None => tweet.entities
+    }
+
     entities match {
       case Some(ents) =>
         ents.hashtags.foldLeft(Map.empty[String, Int]) {
