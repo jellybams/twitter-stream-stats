@@ -1,6 +1,6 @@
 # Twitter Stream Stats
 
-Consumes twitter's sample status stream and calculates stats. Stats are printed in the terminal every four seconds via the `StatsConsolePrinter`. Sample console output:
+Consumes twitter's sample status stream and calculates stats. Stats are printed in the terminal every three seconds via the `StatsConsolePrinter`. Sample console output:
 
 
     =========================================================
