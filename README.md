@@ -1,6 +1,6 @@
 # Twitter Stream Stats
 
-Consumes twitter's sample status stream and calculates stats. Stats are served via `http://localhost:8080/v1/stats`.
+Consumes twitter's sample status stream and calculates stats. Stats are printed in the terminal via the `StatsConsolePrinter`.
 
 ## Running the app
 
