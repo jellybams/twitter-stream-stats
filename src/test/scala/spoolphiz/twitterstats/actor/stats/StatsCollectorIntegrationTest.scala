@@ -106,9 +106,26 @@ class StatsCollectorIntegrationTest extends BaseTwitterIntegrationTest {
     }
 
     "track top domains" in {
-      val domains = Map(
-
+      val urls = Map(
+        "https://news.ycombinator.com/item?id=22638558" -> 1,
+        "https://news.ycombinator.com/item?id=22631498" -> 1,
+        "https://news.ycombinator.com/item?id=22630665" -> 1,
+        "https://www.calculatedriskblog.com/2020/03/nar-existing-home-sales-increased-to.html" -> 1
       )
+
+      val tweets = generateTweets(count = 12, urls = urls)
+
+      tweets.foreach(statsProcessorSupervisor ! _)
+
+      Thread.sleep(500)
+
+      val resultF = (statsCollectorActor ? GetStats).mapTo[StatsData]
+
+      whenReady(resultF) { result =>
+        result.topDomains.size shouldEqual 2
+        result.topDomains("news.ycombinator.com") shouldEqual 3
+        result.topDomains("www.calculatedriskblog.com") shouldEqual 1
+      }
     }
   }
 }

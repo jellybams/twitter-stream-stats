@@ -46,12 +46,12 @@ class BaseTwitterIntegrationTest extends TestKit(ActorSystem("TestSystem"))
     val emojisPerTweet = math.ceil(emojis.values.sum.toDouble / count.toDouble).toInt
     val hashtagsPerTweet = math.ceil(hashtags.values.sum.toDouble / count.toDouble).toInt
     val urlsPerTweet = math.ceil(urls.values.sum.toDouble / count.toDouble).toInt
-    val imageUrlsPerTweet = math.ceil(imageUrls.values.sum.toDouble / count.toDouble).toInt
 
     val emojiPool = splitEntityPool(emojisPerTweet, count, emojis)
     val hashtagPool = splitEntityPool(hashtagsPerTweet, count, hashtags)
+    val urlPool = splitEntityPool(urlsPerTweet, count, urls)
 
-    doGenTweets(Seq.empty, count, emojiPool, hashtagPool)
+    doGenTweets(Seq.empty, count, emojiPool, hashtagPool, urlPool)
   }
 
   def assembleTweetEntities(rawHashtags: Option[List[String]],
